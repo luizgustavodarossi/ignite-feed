@@ -43,7 +43,7 @@ export function Post({ author, content, publishedAt }) {
   }
 
   const handleNewCommentinvalid = () => {
-    event.target.setCustomValidity('Tá de sacanagem arrombado')
+    event.target.setCustomValidity('Esse campo é obrigatório')
   }
 
   const handleNewCommmentChange = () => {
