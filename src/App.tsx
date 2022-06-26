@@ -22,7 +22,7 @@ const posts = [
       },
       { type: 'link', url: '#', content: '#working' },
     ],
-    published_at: new Date('2022-06-04 6:15:45'),    
+    published_at: new Date('2022-06-04 6:15:45'),
   },
   {
     id: 2,
@@ -77,7 +77,7 @@ export function App() {
               key={`post-${post.id}`}
               author={post.author}
               content={post.content}
-              publishedAt={post.published_at}              
+              publishedAt={post.published_at}
             />
           ))}
         </main>

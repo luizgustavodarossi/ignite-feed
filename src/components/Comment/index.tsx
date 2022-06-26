@@ -11,7 +11,7 @@ interface AuthorProps {
   role: string
 }
 
-interface ContentProps {
+interface ContentCommentProps {
   type: string
   content: string
   url?: string
@@ -20,7 +20,7 @@ interface ContentProps {
 interface CommentProps {
   id: number
   author: AuthorProps
-  content: ContentProps[]
+  content: ContentCommentProps[]
   publishedAt: Date
   onDeleteComment: (id: number) => void
 }
