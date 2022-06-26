@@ -1,33 +1,73 @@
+import { format, formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { ThumbsUp, Trash } from 'phosphor-react'
+import { useState } from 'react'
 import { Avatar } from '../Avatar'
 import styles from './styles.module.scss'
 
-export function Comment() {
+export function Comment({ id, author, content, publishedAt, onDeleteComment }) {
+  const [likeCount, setLikeCount] = useState(0)
+
+  const publishedDateFormatted = format(
+    publishedAt,
+    "dd 'de' LLLL 'às' HH:mm'h'",
+    {
+      locale: ptBR,
+    },
+  )
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  })
+
+  const handleLikeComment = () => setLikeCount((state) => state + 1)
+
+  const handleDeleteComment = () => onDeleteComment(id)
+
   return (
     <div className={styles.comment}>
-      <Avatar hasBorder={false} src="https://github.com/luizgustavodarossi.png" />
+      <Avatar hasBorder={false} src={author.avatarUrl} />
 
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>
           <header>
             <div className={styles.authorAndTime}>
-              <strong>Luiz Gustavo Darossi</strong>
+              <strong>{author.name}</strong>
 
-              <time title='25 de junho às 08:11' dateTime='2022-06-25 08:11:00'>Cerca de 1 h atrás</time>
+              <time
+                title={publishedDateFormatted}
+                dateTime={publishedAt.toISOString()}
+              >
+                {publishedDateRelativeToNow}
+              </time>
             </div>
 
-            <button title='Deletar comentário'>
+            <button onClick={handleDeleteComment} title="Deletar comentário">
               <Trash size={24} />
             </button>
           </header>
 
-          <p>Muito bom Devon, parabéns!!</p>
+          {content.map((line) => {
+            if (line.type === 'paragraph') {
+              return <p key={`content-${line.content}`}>{line.content}</p>
+            }
+            if (line.type === 'link') {
+              return (
+                <p>
+                  <a key={`content-${line.content}`} href={line.url}>
+                    {line.content}
+                  </a>
+                </p>
+              )
+            }
+          })}
         </div>
 
         <footer>
-          <button>
+          <button onClick={handleLikeComment}>
             <ThumbsUp />
-            Aplaudir <span>20</span>
+            Aplaudir <span>{likeCount}</span>
           </button>
         </footer>
       </div>
