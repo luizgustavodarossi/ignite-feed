@@ -1,6 +1,11 @@
 import styles from './styes.module.scss'
 
-export function Avatar({ src, hasBorder }) {
+interface Props {
+  src: string
+  hasBorder: boolean
+}
+
+export function Avatar({ src, hasBorder }: Props) {
   return (
     <img
       className={hasBorder ? styles.avatarWithBorder : styles.avatar}

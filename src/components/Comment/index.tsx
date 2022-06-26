@@ -5,7 +5,33 @@ import { useState } from 'react'
 import { Avatar } from '../Avatar'
 import styles from './styles.module.scss'
 
-export function Comment({ id, author, content, publishedAt, onDeleteComment }) {
+interface AuthorProps {
+  avatarUrl: string
+  name: string
+  role: string
+}
+
+interface ContentProps {
+  type: string
+  content: string
+  url?: string
+}
+
+interface CommentProps {
+  id: number
+  author: AuthorProps
+  content: ContentProps[]
+  publishedAt: Date
+  onDeleteComment: (id: number) => void
+}
+
+export function Comment({
+  id,
+  author,
+  content,
+  publishedAt,
+  onDeleteComment,
+}: CommentProps) {
   const [likeCount, setLikeCount] = useState(0)
 
   const publishedDateFormatted = format(

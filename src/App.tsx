@@ -77,8 +77,7 @@ export function App() {
               key={`post-${post.id}`}
               author={post.author}
               content={post.content}
-              publishedAt={post.published_at}
-              comments={post.comments}
+              publishedAt={post.published_at}              
             />
           ))}
         </main>

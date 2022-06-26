@@ -1,12 +1,37 @@
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 import { Avatar } from '../Avatar'
 import { Comment } from '../Comment'
 import styles from './styles.module.scss'
 
-export function Post({ author, content, publishedAt }) {
-  const [comments, setComments] = useState([])
+interface AuthorProps {
+  avatarUrl: string
+  name: string
+  role: string
+}
+
+interface ContentProps {
+  type: string
+  content: string
+  url?: string
+}
+
+interface CommentProps {
+  id: number
+  author: AuthorProps
+  content: ContentProps[];
+  published_at: Date
+}
+
+interface PostProps {
+  author: AuthorProps
+  content: ContentProps[]
+  publishedAt: Date
+}
+
+export function Post({ author, content, publishedAt }: PostProps) {
+  const [comments, setComments] = useState<CommentProps[]>([])
   const [newCommentText, setNewCommentText] = useState('')
 
   const publishedDateFormatted = format(
@@ -22,7 +47,7 @@ export function Post({ author, content, publishedAt }) {
     addSuffix: true,
   })
 
-  function handleCreateComment(event) {
+  const handleCreateNewComment = (event: FormEvent) => {
     event.preventDefault()
 
     setComments([
@@ -42,16 +67,18 @@ export function Post({ author, content, publishedAt }) {
     setNewCommentText('')
   }
 
-  const handleNewCommentinvalid = () => {
-    event.target.setCustomValidity('Esse campo é obrigatório')
-  }
-
-  const handleNewCommmentChange = () => {
+  const handleNewCommmentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     event.target.setCustomValidity('')
     setNewCommentText(event.target.value)
   }
 
-  const deleteComment = (id) =>
+  const handleNewCommentinvalid = (
+    event: InvalidEvent<HTMLTextAreaElement>,
+  ) => {
+    event.target.setCustomValidity('Esse campo é obrigatório')
+  }
+
+  const deleteComment = (id: number) =>
     setComments([...comments.filter((comment) => comment.id !== id)])
 
   const isNewCommentEmpty = newCommentText.length === 0
@@ -91,7 +118,7 @@ export function Post({ author, content, publishedAt }) {
         })}
       </div>
 
-      <form onSubmit={handleCreateComment} className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu comentário</strong>
 
         <textarea
