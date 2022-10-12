@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://ignite-feed-i8m5.vercel.app">
+  <a href="https://ignite-feed-gray-eight.vercel.app/">
     <img src="https://raw.githubusercontent.com/luizgustavodarossi/ignite-feed/04e26f271811a4f844c4ffb3ab785ad9a69e8e58/src/assets/ignite-logo.svg" alt="Ignite Feed" width="200">
   </a>
   <br>
