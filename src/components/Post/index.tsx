@@ -1,87 +1,87 @@
-import { format, formatDistanceToNow } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
-import { Avatar } from '../Avatar'
-import { Comment } from '../Comment'
-import styles from './styles.module.scss'
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
+import { Avatar } from "../Avatar";
+import { Comment } from "../Comment";
+import styles from "./styles.module.scss";
 
-interface AuthorProps {
-  avatarUrl: string
-  name: string
-  role: string
+export interface AuthorProps {
+  avatarUrl: string;
+  name: string;
+  role: string;
 }
 
 interface ContentProps {
-  type: string
-  content: string
-  url?: string
+  type: string;
+  content: string;
+  url?: string;
 }
 
 interface CommentProps {
-  id: number
-  author: AuthorProps
+  id: number;
+  author: AuthorProps;
   content: ContentProps[];
-  published_at: Date
+  published_at: Date;
 }
 
 interface PostProps {
-  author: AuthorProps
-  content: ContentProps[]
-  publishedAt: Date
+  author: AuthorProps;
+  content: ContentProps[];
+  publishedAt: Date;
 }
 
 export function Post({ author, content, publishedAt }: PostProps) {
-  const [comments, setComments] = useState<CommentProps[]>([])
-  const [newCommentText, setNewCommentText] = useState('')
+  const [comments, setComments] = useState<CommentProps[]>([]);
+  const [newCommentText, setNewCommentText] = useState("");
 
   const publishedDateFormatted = format(
     publishedAt,
     "dd 'de' LLLL 'às' HH:mm'h'",
     {
       locale: ptBR,
-    },
-  )
+    }
+  );
 
   const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
     locale: ptBR,
     addSuffix: true,
-  })
+  });
 
   const handleCreateNewComment = (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
 
     setComments([
       ...comments,
       {
         id: comments.length > 0 ? comments[comments.length - 1].id + 1 : 1,
         author: {
-          avatarUrl: 'https://github.com/luizgustavodarossi.png',
-          name: 'Luiz Gustavo Darossi',
-          role: 'Web Developer',
+          avatarUrl: "https://github.com/luizgustavodarossi.png",
+          name: "Luiz Gustavo Darossi",
+          role: "Web Developer",
         },
-        content: [{ type: 'paragraph', content: newCommentText }],
+        content: [{ type: "paragraph", content: newCommentText }],
         published_at: new Date(),
       },
-    ])
+    ]);
 
-    setNewCommentText('')
-  }
+    setNewCommentText("");
+  };
 
   const handleNewCommmentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    event.target.setCustomValidity('')
-    setNewCommentText(event.target.value)
-  }
+    event.target.setCustomValidity("");
+    setNewCommentText(event.target.value);
+  };
 
   const handleNewCommentinvalid = (
-    event: InvalidEvent<HTMLTextAreaElement>,
+    event: InvalidEvent<HTMLTextAreaElement>
   ) => {
-    event.target.setCustomValidity('Esse campo é obrigatório')
-  }
+    event.target.setCustomValidity("Esse campo é obrigatório");
+  };
 
   const deleteComment = (id: number) =>
-    setComments([...comments.filter((comment) => comment.id !== id)])
+    setComments([...comments.filter((comment) => comment.id !== id)]);
 
-  const isNewCommentEmpty = newCommentText.length === 0
+  const isNewCommentEmpty = newCommentText.length === 0;
 
   return (
     <article className={styles.post}>
@@ -97,23 +97,22 @@ export function Post({ author, content, publishedAt }: PostProps) {
 
         <time
           title={publishedDateFormatted}
-          dateTime={publishedAt.toISOString()}
-        >
+          dateTime={publishedAt.toISOString()}>
           {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
         {content.map((line) => {
-          if (line.type === 'paragraph') {
-            return <p key={`content-${line.content}`}>{line.content}</p>
+          if (line.type === "paragraph") {
+            return <p key={`content-${line.content}`}>{line.content}</p>;
           }
-          if (line.type === 'link') {
+          if (line.type === "link") {
             return (
               <p key={`content-${line.content}`}>
                 <a href={line.url}>{line.content}</a>
               </p>
-            )
+            );
           }
         })}
       </div>
@@ -122,8 +121,8 @@ export function Post({ author, content, publishedAt }: PostProps) {
         <strong>Deixe seu comentário</strong>
 
         <textarea
-          name="comment"
-          placeholder="Deixe um comentário..."
+          name='comment'
+          placeholder='Deixe um comentário...'
           onChange={handleNewCommmentChange}
           value={newCommentText}
           required
@@ -131,7 +130,7 @@ export function Post({ author, content, publishedAt }: PostProps) {
         />
 
         <footer>
-          <button type="submit" disabled={isNewCommentEmpty}>
+          <button type='submit' disabled={isNewCommentEmpty}>
             Comentar
           </button>
         </footer>
@@ -148,9 +147,9 @@ export function Post({ author, content, publishedAt }: PostProps) {
               publishedAt={comment.published_at}
               onDeleteComment={deleteComment}
             />
-          )
+          );
         })}
       </div>
     </article>
-  )
+  );
 }

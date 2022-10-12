@@ -1,28 +1,23 @@
-import { format, formatDistanceToNow } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { ThumbsUp, Trash } from 'phosphor-react'
-import { useState } from 'react'
-import { Avatar } from '../Avatar'
-import styles from './styles.module.scss'
-
-interface AuthorProps {
-  avatarUrl: string
-  name: string
-  role: string
-}
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { ThumbsUp, Trash } from "phosphor-react";
+import { useState } from "react";
+import { Avatar } from "../Avatar";
+import { AuthorProps } from "../Post";
+import styles from "./styles.module.scss";
 
 interface ContentCommentProps {
-  type: string
-  content: string
-  url?: string
+  type: string;
+  content: string;
+  url?: string;
 }
 
 interface CommentProps {
-  id: number
-  author: AuthorProps
-  content: ContentCommentProps[]
-  publishedAt: Date
-  onDeleteComment: (id: number) => void
+  id: number;
+  author: AuthorProps;
+  content: ContentCommentProps[];
+  publishedAt: Date;
+  onDeleteComment: (id: number) => void;
 }
 
 export function Comment({
@@ -32,24 +27,24 @@ export function Comment({
   publishedAt,
   onDeleteComment,
 }: CommentProps) {
-  const [likeCount, setLikeCount] = useState(0)
+  const [likeCount, setLikeCount] = useState(0);
 
   const publishedDateFormatted = format(
     publishedAt,
     "dd 'de' LLLL 'às' HH:mm'h'",
     {
       locale: ptBR,
-    },
-  )
+    }
+  );
 
   const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
     locale: ptBR,
     addSuffix: true,
-  })
+  });
 
-  const handleLikeComment = () => setLikeCount((state) => state + 1)
+  const handleLikeComment = () => setLikeCount((state) => state + 1);
 
-  const handleDeleteComment = () => onDeleteComment(id)
+  const handleDeleteComment = () => onDeleteComment(id);
 
   return (
     <div className={styles.comment}>
@@ -63,29 +58,28 @@ export function Comment({
 
               <time
                 title={publishedDateFormatted}
-                dateTime={publishedAt.toISOString()}
-              >
+                dateTime={publishedAt.toISOString()}>
                 {publishedDateRelativeToNow}
               </time>
             </div>
 
-            <button onClick={handleDeleteComment} title="Deletar comentário">
+            <button onClick={handleDeleteComment} title='Deletar comentário'>
               <Trash size={24} />
             </button>
           </header>
 
           {content.map((line) => {
-            if (line.type === 'paragraph') {
-              return <p key={`content-${line.content}`}>{line.content}</p>
+            if (line.type === "paragraph") {
+              return <p key={`content-${line.content}`}>{line.content}</p>;
             }
-            if (line.type === 'link') {
+            if (line.type === "link") {
               return (
                 <p>
                   <a key={`content-${line.content}`} href={line.url}>
                     {line.content}
                   </a>
                 </p>
-              )
+              );
             }
           })}
         </div>
@@ -98,5 +92,5 @@ export function Comment({
         </footer>
       </div>
     </div>
-  )
+  );
 }
